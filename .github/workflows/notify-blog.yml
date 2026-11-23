@@ -1,0 +1,21 @@
+# 이 저장소에 푸시되면 홈페이지 저장소(Amchoking5.github.io)의 배포 workflow를 실행시킨다.
+name: Notify blog
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Amchoking5.github.io rebuild
+        env:
+          GH_TOKEN: ${{ secrets.PORTPOLIO_DISPATCH_TOKEN }}
+        run: |
+          curl -fsSL -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/Amchoking5/Amchoking5.github.io/dispatches \
+            -d '{"event_type":"problem-solving-updated"}'
